@@ -1,0 +1,685 @@
+<title>Eter-Nomad · Oráculo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap">
+<style>
+/* ══ ETER-NOMAD LANDING ══
+   Infinito, cartografía, símbolos de culturas distintas.
+   Paleta: noche profunda, indigo, oro etéreo, bruma.
+*/
+:root {
+  --bg:       #05060F;
+  --bg2:      #090B18;
+  --indigo:   #3D52C8;
+  --violeta:  #7B62D8;
+  --violeta2: #9B82F0;
+  --oro:      #C8A050;
+  --oro-s:    rgba(200,160,80,.15);
+  --brasa:    #C4420A;
+  --smoke:    #EDE8F5;
+  --smoke-d:  rgba(237,232,245,.6);
+  --smoke-f:  rgba(237,232,245,.07);
+  --teal:     #2A7A8C;
+  --azul-viv: #4A6EE8;
+  color-scheme: dark;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:#05060F;color-scheme:dark;}
+body{
+  background:#05060F;
+  min-height:100%;
+  color:var(--smoke);
+  font-family:'Inter',sans-serif;
+  font-weight:300;
+  font-size:15px;
+  line-height:1.7;
+  overflow-x:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+
+/* ── FONDO: campo de estrellas + aurora ── */
+#cosmos{
+  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+.aurora{
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;
+  animation:auroraDrift var(--d,30s) ease-in-out infinite var(--delay,0s);
+}
+.aurora.a{
+  width:1100px;height:700px;top:-25%;left:-25%;
+  background:radial-gradient(ellipse,rgba(61,82,200,.7),rgba(74,110,232,.3) 50%,transparent 70%);
+  --d:28s;
+}
+.aurora.b{
+  width:800px;height:800px;bottom:-30%;right:-20%;
+  background:radial-gradient(ellipse,rgba(123,98,216,.65),rgba(155,130,240,.3) 45%,transparent 70%);
+  --d:35s;--delay:-12s;
+}
+.aurora.c{
+  width:600px;height:500px;top:30%;right:15%;
+  background:radial-gradient(ellipse,rgba(42,122,140,.45),transparent 70%);
+  --d:22s;--delay:-8s;
+}
+.aurora.d{
+  width:500px;height:350px;top:55%;left:10%;
+  background:radial-gradient(ellipse,rgba(74,110,232,.35),transparent 70%);
+  --d:40s;--delay:-20s;
+}
+@keyframes auroraDrift{
+  0%,100%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(40px,-30px) scale(1.08);}
+  66%{transform:translate(-20px,20px) scale(.95);}
+}
+
+/* estrellas canvas */
+#stars-canvas{position:absolute;inset:0;width:100%;height:100%;}
+
+/* ── HERO ── */
+#hero{
+  position:relative;z-index:2;
+  min-height:100svh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;
+  padding:max(80px,env(safe-area-inset-top,0px)) 0 60px;
+  gap:0;
+}
+
+.hero-eyebrow{
+  font-size:9px;letter-spacing:.35em;text-transform:uppercase;
+  color:var(--oro);opacity:.7;margin-bottom:28px;
+  animation:fadeUp .8s ease both;
+}
+
+/* SVG espiral central — decorativa */
+#hero-spiral{
+  width:min(340px,70vw);height:min(340px,70vw);
+  margin-bottom:36px;
+  animation:fadeUp .8s ease .1s both;
+}
+
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(38px,8vw,80px);
+  font-weight:300;line-height:1.05;
+  letter-spacing:.02em;
+  animation:fadeUp .8s ease .2s both;
+}
+.hero-title em{font-style:italic;color:var(--oro);}
+
+.hero-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(15px,2.5vw,20px);
+  font-style:italic;color:var(--smoke-d);
+  margin-top:16px;max-width:500px;
+  animation:fadeUp .8s ease .3s both;
+}
+
+.hero-scroll{
+  margin-top:48px;font-size:9px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--smoke-d);opacity:.4;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  animation:fadeUp .8s ease .6s both;
+}
+.scroll-line{
+  width:1px;height:48px;
+  background:linear-gradient(to bottom,var(--oro),transparent);
+  animation:scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse{0%,100%{opacity:.3;}50%{opacity:.8;}}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:none;}
+}
+
+/* ── SECTION WRAPPER ── */
+.section{
+  position:relative;z-index:2;
+  max-width:900px;margin:0 auto;
+  padding:80px 0;
+}
+.section + .section{padding-top:40px;}
+
+.section-eyebrow{
+  font-size:8.5px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--oro);margin-bottom:14px;font-weight:500;
+}
+
+/* ── INTRO — QUÉ ES ── */
+.intro-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
+}
+@media(max-width:620px){.intro-grid{grid-template-columns:1fr;gap:32px;}}
+
+.intro-text h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(26px,4vw,40px);font-weight:300;line-height:1.2;
+  margin-bottom:20px;
+}
+.intro-text p{color:var(--smoke-d);font-size:14.5px;line-height:1.9;margin-bottom:14px;}
+
+/* símbolo infinito SVG lateral */
+#infinity-wrap{display:flex;align-items:center;justify-content:center;}
+#infinity-wrap svg{width:min(300px,90%);opacity:.8;}
+
+/* ── CÓMO FUNCIONA — 5 ANILLOS ── */
+.rings-explain{
+  margin-top:60px;
+  position:relative;
+}
+.rings-explain h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(24px,3.5vw,38px);font-weight:300;
+  margin-bottom:48px;text-align:center;
+}
+
+.ring-items{
+  display:flex;flex-direction:column;gap:0;
+  position:relative;
+}
+/* línea vertical conectora */
+.ring-items::before{
+  content:'';position:absolute;left:30px;top:30px;bottom:30px;
+  width:1px;background:linear-gradient(to bottom,var(--oro-s),var(--oro-s) 60%,transparent);
+}
+
+.ring-item{
+  display:grid;grid-template-columns:60px 1fr;gap:24px;
+  align-items:start;padding:28px 0;
+  border-bottom:1px solid var(--smoke-f);
+  position:relative;
+  transition:background .3s;
+}
+.ring-item:last-child{border-bottom:none;}
+
+.ring-num{
+  width:60px;height:60px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:1.5px solid;
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:300;font-style:italic;
+  flex-shrink:0;position:relative;z-index:1;
+  background:var(--bg);
+}
+.ring-num.r1{border-color:rgba(196,66,10,.5);color:#C4420A;}
+.ring-num.r2{border-color:rgba(232,144,10,.5);color:#E8900A;}
+.ring-num.r3{border-color:rgba(217,79,42,.5);color:#D94F2A;}
+.ring-num.r4{border-color:rgba(200,160,80,.5);color:var(--oro);}
+.ring-num.r5{border-color:rgba(237,232,245,.3);color:var(--smoke);}
+
+.ring-content h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(18px,2.5vw,24px);font-weight:300;
+  margin-bottom:8px;line-height:1.2;
+}
+.ring-content p{font-size:13.5px;color:var(--smoke-d);line-height:1.85;}
+.ring-content .ring-action{
+  display:inline-block;margin-top:10px;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--oro);opacity:.7;
+}
+
+/* ── COSMOGRAMA — TRADICIONES ── */
+.cosmo-section{
+  margin-top:80px;
+  padding:60px 48px;
+  background:var(--smoke-f);
+  border:1px solid rgba(237,232,245,.06);
+  position:relative;overflow:hidden;
+}
+@media(max-width:600px){.cosmo-section{padding:40px 20px;}}
+
+.cosmo-section::before{
+  content:'';position:absolute;top:-1px;left:60px;right:60px;height:1px;
+  background:linear-gradient(to right,transparent,var(--oro),transparent);
+}
+
+.cosmo-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(22px,3vw,32px);font-weight:300;
+  text-align:center;margin-bottom:48px;
+}
+
+.traditions-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:24px;
+}
+
+.trad-card{
+  padding:20px 18px;
+  border:1px solid rgba(237,232,245,.08);
+  position:relative;
+  transition:border-color .3s,transform .3s;
+  cursor:default;
+}
+.trad-card:hover{
+  border-color:rgba(200,160,80,.4);
+  transform:translateY(-3px);
+}
+.trad-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--grad-top,var(--oro));
+}
+
+.trad-symbol{
+  font-size:32px;margin-bottom:12px;display:block;
+  filter:drop-shadow(0 0 8px rgba(200,160,80,.3));
+}
+.trad-name{
+  font-size:8px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--oro);margin-bottom:6px;font-weight:500;
+}
+.trad-desc{
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px;font-style:italic;color:var(--smoke-d);line-height:1.75;
+}
+
+/* ── CÓMO INTERACTUAR ── */
+.interact-section{margin-top:80px;}
+.interact-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(22px,3vw,34px);font-weight:300;
+  text-align:center;margin-bottom:48px;
+}
+
+.steps-flow{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:0;
+  position:relative;
+}
+
+.step{
+  padding:28px 24px;
+  position:relative;
+  border-left:1px solid var(--smoke-f);
+}
+.step:first-child{border-left:none;}
+@media(max-width:600px){
+  .steps-flow{grid-template-columns:1fr;}
+  .step{border-left:none;border-top:1px solid var(--smoke-f);padding:20px 0;}
+  .step:first-child{border-top:none;}
+}
+
+.step-n{
+  font-family:'Cormorant Garamond',serif;
+  font-size:52px;font-weight:300;font-style:italic;
+  color:var(--oro);opacity:.18;
+  line-height:1;margin-bottom:12px;
+  display:block;
+}
+.step h4{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:300;margin-bottom:8px;
+}
+.step p{font-size:13px;color:var(--smoke-d);line-height:1.8;}
+
+/* ── SEPARADOR DECORATIVO ── */
+.sep{
+  display:flex;align-items:center;justify-content:center;
+  gap:20px;padding:40px 0;
+  color:var(--oro);opacity:.3;
+  font-size:12px;letter-spacing:.3em;
+}
+.sep::before,.sep::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(to right,transparent,var(--oro),transparent);
+}
+
+/* ── CTA CINTHIA ── */
+.cta-section{
+  margin:60px 0 100px;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;gap:24px;
+  position:relative;z-index:2;
+}
+
+.cta-label{
+  font-size:9px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--oro);opacity:.7;
+}
+
+.cta-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(32px,6vw,60px);font-weight:300;line-height:1.1;
+}
+.cta-name span{font-style:italic;color:var(--brasa);}
+
+.cta-desc{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(15px,2vw,18px);font-style:italic;
+  color:var(--smoke-d);max-width:420px;line-height:1.75;
+}
+
+.btn-enter{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:16px 36px;
+  background:var(--brasa);
+  border:2px solid var(--brasa);
+  box-shadow:5px 5px 0 rgba(200,160,80,.25);
+  font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:#0A0806;font-family:'Inter',sans-serif;font-weight:500;
+  text-decoration:none;cursor:pointer;
+  transition:background .2s,box-shadow .2s,transform .2s;
+  margin-top:8px;
+}
+.btn-enter:hover{
+  background:#E8900A;
+  transform:translate(-3px,-3px);
+  box-shadow:8px 8px 0 rgba(200,160,80,.25);
+}
+.btn-enter-arrow{font-size:16px;transition:transform .3s;}
+.btn-enter:hover .btn-enter-arrow{transform:translateX(4px);}
+
+.cta-note{font-size:11px;color:var(--smoke-d);opacity:.4;}
+
+/* ── FOOTER ── */
+footer{
+  position:relative;z-index:2;
+  text-align:center;padding:32px 0 max(32px,env(safe-area-inset-bottom,0px));
+  font-size:11px;color:var(--smoke-d);opacity:.3;
+  letter-spacing:.12em;
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal{
+  opacity:0;transform:translateY(28px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.reveal.visible{opacity:1;transform:none;}
+.reveal.delay-1{transition-delay:.1s;}
+.reveal.delay-2{transition-delay:.2s;}
+.reveal.delay-3{transition-delay:.3s;}
+</style>
+
+<!-- fondo cósmico -->
+<div id="cosmos">
+  <canvas id="stars-canvas"></canvas>
+  <div class="aurora a"></div>
+  <div class="aurora b"></div>
+  <div class="aurora c"></div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-eyebrow">Eter-Nomad · Cartografía del alma</div>
+
+  <!-- espiral SVG animada -->
+  <svg id="hero-spiral" viewBox="-170 -170 340 340" fill="none">
+    <defs>
+      <radialGradient id="sg" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#C8A050" stop-opacity=".6"/>
+        <stop offset="100%" stop-color="#C8A050" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <!-- aureola fondo -->
+    <circle r="155" fill="url(#sg)" opacity=".3"/>
+    <!-- anillos -->
+    <circle r="155" stroke="rgba(200,160,80,.12)" stroke-width="1" stroke-dasharray="6 8"/>
+    <circle r="118" stroke="rgba(196,66,10,.18)" stroke-width="1" stroke-dasharray="4 7"/>
+    <circle r="84"  stroke="rgba(200,160,80,.2)"  stroke-width="1" stroke-dasharray="3 6"/>
+    <circle r="52"  stroke="rgba(196,66,10,.25)"  stroke-width="1" stroke-dasharray="2 5"/>
+    <circle r="22"  stroke="rgba(200,160,80,.4)"  stroke-width="1.5"/>
+    <!-- espiral -->
+    <path id="hero-sp" stroke="rgba(200,160,80,.5)" stroke-width="1.2"
+      d="M4,0 C4,-3 7,-5 0,-5 C-9,-5 -14,0 -14,14 C-14,32 0,42 22,42 C50,42 68,18 68,0 C68,-32 46,-60 0,-60 C-46,-60 -82,-28 -82,0 C-82,46 -46,92 18,92 C80,92 130,42 130,0 C130,-60 78,-120 0,-120 C-78,-120 -155,-60 -155,0"/>
+    <!-- símbolos en anillos — puntos de cultura -->
+    <!-- flor de la vida (centro) -->
+    <circle cx="0" cy="0" r="8" stroke="rgba(200,160,80,.4)" stroke-width=".8" fill="none"/>
+    <circle cx="8" cy="0" r="8" stroke="rgba(200,160,80,.2)" stroke-width=".6" fill="none"/>
+    <circle cx="-8" cy="0" r="8" stroke="rgba(200,160,80,.2)" stroke-width=".6" fill="none"/>
+    <circle cx="4" cy="-7" r="8" stroke="rgba(200,160,80,.2)" stroke-width=".6" fill="none"/>
+    <circle cx="-4" cy="-7" r="8" stroke="rgba(200,160,80,.2)" stroke-width=".6" fill="none"/>
+    <circle cx="4" cy="7" r="8" stroke="rgba(200,160,80,.2)" stroke-width=".6" fill="none"/>
+    <circle cx="-4" cy="7" r="8" stroke="rgba(200,160,80,.2)" stroke-width=".6" fill="none"/>
+    <!-- marcas culturales en los anillos -->
+    <!-- ankh (ar. 155) -->
+    <text x="0" y="-148" text-anchor="middle" font-size="10" fill="rgba(200,160,80,.4)">☥</text>
+    <!-- yin yang (ar 118) -->
+    <text x="118" y="4" text-anchor="middle" font-size="9" fill="rgba(200,160,80,.35)">☯</text>
+    <!-- estrella david (ar 84) -->
+    <text x="-84" y="4" text-anchor="middle" font-size="9" fill="rgba(200,160,80,.3)">✡</text>
+    <!-- sol azteca fragmento -->
+    <text x="0" y="90" text-anchor="middle" font-size="9" fill="rgba(200,160,80,.3)">𓇳</text>
+    <!-- media luna (ar 52) -->
+    <text x="52" y="4" text-anchor="middle" font-size="9" fill="rgba(200,160,80,.4)">☽</text>
+  </svg>
+
+  <h1 class="hero-title">El oráculo<br>es <em>un espejo</em></h1>
+  <p class="hero-sub">Un sistema de cinco capas para mirar hacia adentro.<br>Nació de la intersección de cuatro culturas y un alma.</p>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    explorar
+  </div>
+</section>
+
+<!-- ══ INTRO ══ -->
+<div class="section">
+  <div class="intro-grid reveal">
+    <div class="intro-text">
+      <div class="section-eyebrow">¿Qué es este oráculo?</div>
+      <h2>No predice.<br>Revela.</h2>
+      <p>Eter-Nomad es un espacio donde culturas que nunca se conocieron convergen sobre la misma pregunta: <em style="font-style:italic;color:var(--oro)">¿quién eres debajo de lo que haces?</em></p>
+      <p>Cada oráculo es único. No hay dos iguales. Cada persona recibe el suyo construido desde la geometría de su propia alma — su carta natal, su kin maya, su pilar BaZi, su calendario nahua. El oráculo no inventa. Recuerda.</p>
+    </div>
+    <div id="infinity-wrap">
+      <!-- símbolo infinito + espiral integrados -->
+      <svg viewBox="-150 -100 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="infGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#C4420A" stop-opacity=".6"/>
+            <stop offset="50%" stop-color="#C8A050" stop-opacity=".8"/>
+            <stop offset="100%" stop-color="#2D3A8C" stop-opacity=".6"/>
+          </linearGradient>
+        </defs>
+        <!-- figura ∞ -->
+        <path d="M0,0 C0,-50 -100,-50 -100,0 C-100,50 0,50 0,0 C0,-50 100,-50 100,0 C100,50 0,50 0,0"
+          stroke="url(#infGrad)" stroke-width="2" stroke-dasharray="4 4"
+          style="animation:infRotate 20s linear infinite"/>
+        <path d="M0,0 C0,-30 -60,-30 -60,0 C-60,30 0,30 0,0 C0,-30 60,-30 60,0 C60,30 0,30 0,0"
+          stroke="rgba(200,160,80,.4)" stroke-width="1" fill="none"/>
+        <!-- punto central -->
+        <circle r="5" fill="#C8A050" opacity=".7"/>
+        <circle r="12" stroke="rgba(200,160,80,.2)" stroke-width="1" fill="none"/>
+        <!-- textos culturales alrededor -->
+        <text x="-100" y="-60" font-family="serif" font-size="9" fill="rgba(200,160,80,.4)" text-anchor="middle">∞</text>
+        <text x="100" y="70" font-family="serif" font-size="8" fill="rgba(45,58,140,.7)" text-anchor="middle">循環</text>
+        <text x="-110" y="65" font-family="serif" font-size="8" fill="rgba(196,66,10,.5)" text-anchor="middle">𓇯</text>
+        <text x="115" y="-55" font-family="serif" font-size="9" fill="rgba(42,122,140,.6)" text-anchor="middle">ॐ</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="sep reveal">· · ·</div>
+
+<!-- ══ CÓMO FUNCIONA — ANILLOS ══ -->
+<div class="section rings-explain">
+  <h2 class="reveal">La arquitectura de la espiral</h2>
+  <div class="ring-items">
+    <div class="ring-item reveal">
+      <div class="ring-num r1">I</div>
+      <div class="ring-content">
+        <h3>Presencia — el primer anillo</h3>
+        <p>Antes de cualquier respuesta, una pregunta: <em>¿cómo llegas hoy?</em> El oráculo comienza por reconocer el estado emocional del momento. Seis palabras-umbral para nombrar lo que traes. Dependiendo de cómo respondas, el oráculo abre su interior de manera distinta.</p>
+        <span class="ring-action">— donde empieza el viaje</span>
+      </div>
+    </div>
+    <div class="ring-item reveal delay-1">
+      <div class="ring-num r2">II</div>
+      <div class="ring-content">
+        <h3>Tierra — los contratos de esta vida</h3>
+        <p>Lo que cuatro tradiciones vieron en el momento de tu nacimiento. No el horóscopo de revista — la geometría real de tu carta natal, tu kin maya, tus pilares BaZi, tu día tonalpohualli. Cuatro sistemas que nunca se conocieron entre sí y que apuntan al mismo lugar.</p>
+        <span class="ring-action">— lo que cuatro tradiciones vieron</span>
+      </div>
+    </div>
+    <div class="ring-item reveal delay-2">
+      <div class="ring-num r3">III</div>
+      <div class="ring-content">
+        <h3>Memoria — lo que el alma trae</h3>
+        <p>Patrones que se repiten sin que los hayas elegido. Tensiones que sientes sin saber por qué. Esta capa trabaja con la sombra, con los nudos kármicos, con lo que los sistemas llaman "estrella solitaria", "oposición", "antípoda". No para quedarte ahí. Para reconocerlo y soltarlo.</p>
+        <span class="ring-action">— lo que es más antiguo que esta vida</span>
+      </div>
+    </div>
+    <div class="ring-item reveal delay-1">
+      <div class="ring-num r4">IV</div>
+      <div class="ring-content">
+        <h3>Éter — el hilo que une todo</h3>
+        <p>Más allá del propósito de <em>esta</em> vida. El hilo que conecta al alma como entidad viajera a través de muchas existencias. Saturno en Casa 12, el Kin Oculto, el fuego sagrado nahua. El oráculo te devuelve la pregunta más profunda que tienes.</p>
+        <span class="ring-action">— lo que trasciende</span>
+      </div>
+    </div>
+    <div class="ring-item reveal delay-2">
+      <div class="ring-num r5">V</div>
+      <div class="ring-content">
+        <h3>Centro — el silencio</h3>
+        <p>El punto donde no hay más capas que cruzar. No hay texto que leer. Solo espacio para escribir lo que emerge. O para no escribir nada. El centro no es el final del oráculo — es el origen de la próxima espiral.</p>
+        <span class="ring-action">— donde el fuego original vive</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sep reveal">· · ·</div>
+
+<!-- ══ TRADICIONES ══ -->
+<div class="section">
+  <div class="cosmo-section reveal">
+    <div class="section-eyebrow" style="text-align:center;margin-bottom:16px">Las fuentes</div>
+    <h2 class="cosmo-title">Cuatro culturas.<br>Una pregunta.</h2>
+    <div class="traditions-grid">
+      <div class="trad-card" style="--grad-top:linear-gradient(to right,#6A9DD4,#2D3A8C)">
+        <span class="trad-symbol">♈</span>
+        <div class="trad-name">Astrología Occidental</div>
+        <div class="trad-desc">La geometría del cielo en el instante del nacimiento. Planetas, aspectos, casas, nodos. El mapa de la personalidad más compleja que existe.</div>
+      </div>
+      <div class="trad-card" style="--grad-top:linear-gradient(to right,#E8900A,#C4420A)">
+        <span class="trad-symbol">甲</span>
+        <div class="trad-name">BaZi — Destino Chino</div>
+        <div class="trad-desc">Los cuatro pilares del destino. La combinación de los diez troncos celestes y doce ramas terrestres que definen los ritmos de vida de cada alma.</div>
+      </div>
+      <div class="trad-card" style="--grad-top:linear-gradient(to right,#6AAD80,#2A7A8C)">
+        <span class="trad-symbol">𝄋</span>
+        <div class="trad-name">Calendario Maya Tzolkin</div>
+        <div class="trad-desc">260 días de tiempo sagrado. 20 sellos solares, 13 tonos de creación. Tu Kin define tu arquetipo de alma y los ciclos naturales de tu evolución.</div>
+      </div>
+      <div class="trad-card" style="--grad-top:linear-gradient(to right,#D94F2A,#8B1A0A)">
+        <span class="trad-symbol">𓇳</span>
+        <div class="trad-name">Tonalpohualli Nahua</div>
+        <div class="trad-desc">El calendario sagrado de Mesoamérica. 260 combinaciones de energías que nombran el espíritu de cada día y el contrato de cada persona con el cosmos.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CÓMO INTERACTUAR ══ -->
+<div class="section">
+  <div class="section-eyebrow reveal" style="text-align:center">¿Cómo lo uso?</div>
+  <div class="interact-title reveal">No hay forma incorrecta de entrar</div>
+  <div class="steps-flow">
+    <div class="step reveal">
+      <span class="step-n">1</span>
+      <h4>Llega como eres</h4>
+      <p>El primer anillo te pregunta cómo llegas emocionalmente. Sé honesta. El oráculo cambia su respuesta dependiendo de lo que eliges.</p>
+    </div>
+    <div class="step reveal delay-1">
+      <span class="step-n">2</span>
+      <h4>Sigue la espiral</h4>
+      <p>Cada anillo lleva al siguiente. No tienes que leerlos todos en un solo día. Puedes quedarte en uno. Puedes volver al mismo anillo en momentos distintos.</p>
+    </div>
+    <div class="step reveal delay-2">
+      <span class="step-n">3</span>
+      <h4>Escribe si quieres</h4>
+      <p>En cada capa hay un espacio de escritura. Lo que escribas se guarda en tu navegador — es solo tuyo, nadie más puede verlo.</p>
+    </div>
+    <div class="step reveal delay-3">
+      <span class="step-n">4</span>
+      <h4>Regresa</h4>
+      <p>El oráculo no se "termina". Cada vez que regresas, llegas desde un lugar distinto. La espiral siempre tiene otra vuelta.</p>
+    </div>
+  </div>
+</div>
+
+<div class="sep reveal">· · · ✦ · · ·</div>
+
+<!-- ══ CTA ══ -->
+<div class="cta-section reveal">
+  <div class="cta-label">Tu oráculo personal</div>
+  <div class="cta-name">
+    Este oráculo<br>fue hecho para<br><span>Cinthia</span>
+  </div>
+  <p class="cta-desc">
+    Fuego que se mueve. Corazón que siente.<br>Estrella que explota e implota cuando necesita cuidar su fuego.<br>Sol y Luna en Cáncer. Tormenta Planetaria. Ji — Tierra Yin.
+  </p>
+  <a class="btn-enter" href="./oraculo_cinthia.html">
+    Entrar al oráculo
+    <span class="btn-enter-arrow">→</span>
+  </a>
+  <div class="cta-note">Un regalo hecho con sus cuatro sistemas reales</div>
+</div>
+
+<footer>
+  Eter-Nomad · un proyecto de cartografía del alma · 2026
+</footer>
+
+<script>
+// ── ESTRELLAS ──
+const canvas = document.getElementById('stars-canvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function resize() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+function mkStars() {
+  stars = [];
+  const n = Math.floor((canvas.width * canvas.height) / 4000);
+  for (let i = 0; i < n; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.1 + .2,
+      a: Math.random(),
+      da: (Math.random() - .5) * .004,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+}
+mkStars();
+window.addEventListener('resize', mkStars);
+
+function drawStars(t) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (const s of stars) {
+    s.a = .3 + .7 * Math.abs(Math.sin(s.phase + t * s.da * 100));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(237,232,245,${s.a * .8})`;
+    ctx.fill();
+  }
+  requestAnimationFrame(drawStars);
+}
+requestAnimationFrame(drawStars);
+
+// ── ESPIRAL HERO GIRATORIA ──
+const heroSp = document.getElementById('hero-sp');
+let ang = 0;
+function rotateSpiral() {
+  ang += 0.006;
+  heroSp.setAttribute('transform', `rotate(${ang})`);
+  requestAnimationFrame(rotateSpiral);
+}
+rotateSpiral();
+
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: .12 });
+reveals.forEach(el => observer.observe(el));
+</script>

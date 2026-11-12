@@ -1,0 +1,793 @@
+<title>Cinthia · Oráculo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@1,400;1,700&display=swap">
+
+<style>
+:root{
+  --bg:#04080C; --bg2:#060C12;
+  --cream:#D9C7A8; --mauve:#B8A0C2; --pblue:#8B9CC4; --porg:#C4834A;
+  --ch:#E8604A; --cc:#EDD0B8; --cglow:rgba(232,96,74,.55);
+  --sd:#0E3A42; --st:#1A7A8A; --sturq:#2AB5C4; --sl:#A8D8E0;
+  --lav:#C8B8E0; --amb:#D4C880;
+  --smoke:#EDF5F7; --s60:rgba(237,245,247,.6); --s25:rgba(237,245,247,.25); --s08:rgba(237,245,247,.07);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{overflow-x:hidden;scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--smoke);font-family:'Inter',sans-serif;font-weight:300;overflow-x:hidden;}
+
+/* ── LAYOUT SHELL ── */
+#shell{display:flex;min-height:100svh;}
+
+/* ── SIDEBAR NAV FIJO ── */
+#sidenav{
+  position:fixed;top:0;left:0;bottom:0;
+  width:52px;z-index:50;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;
+  padding:max(20px,env(safe-area-inset-top,0px)) 0 max(20px,env(safe-area-inset-bottom,0px));
+  border-right:1px solid var(--s08);
+}
+.snav-item{
+  writing-mode:vertical-rl;
+  font-size:7px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--s25);cursor:pointer;
+  padding:12px 6px;
+  transition:color .25s;position:relative;
+}
+.snav-item::before{
+  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:0;height:1.5px;background:var(--ch);
+  transition:width .25s;
+}
+.snav-item.active{color:var(--smoke);}
+.snav-item.active::before{width:100%;}
+
+/* ── TÍTULO STICKY TOP-LEFT ── */
+#corner{
+  position:fixed;top:max(16px,env(safe-area-inset-top,0px));left:66px;
+  z-index:50;
+  font-size:9px;letter-spacing:.35em;text-transform:uppercase;
+  color:var(--s25);transition:color .4s;
+  pointer-events:none;
+}
+#corner.bright{color:var(--sturq);}
+
+/* ── MAIN CONTENT ── */
+#main{
+  margin-left:52px;
+  flex:1;min-width:0;
+}
+
+/* ── SECCIONES ── */
+.sec{
+  min-height:100svh;
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:max(80px,env(safe-area-inset-top,0px)) clamp(24px,6vw,80px)
+          max(80px,env(safe-area-inset-bottom,0px)) clamp(20px,4vw,56px);
+}
+.sec-inner{max-width:1100px;width:100%;margin:0 auto;position:relative;}
+
+/* fondos por sección */
+#s0{background:var(--bg);}
+#s1{background:linear-gradient(170deg,#040810 0%,#070C18 100%);}
+#s2{background:linear-gradient(160deg,#060E16 0%,#081420 60%,#04090D 100%);}
+#s3{background:linear-gradient(170deg,#060A10 0%,#0D0808 100%);}
+#s4{background:linear-gradient(160deg,#040810 0%,#0A1220 60%,#060C06 100%);}
+#s5{background:var(--bg);display:flex;align-items:center;justify-content:center;text-align:center;}
+
+/* orbes */
+.orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;
+  animation:od var(--d,22s) ease-in-out infinite var(--delay,0s);}
+@keyframes od{0%,100%{transform:translate(0,0);}50%{transform:translate(var(--tx,30px),var(--ty,-20px));}}
+
+/* ── INTRO ── */
+#intro-canvas{position:absolute;inset:0;pointer-events:none;z-index:0;}
+.intro-wrap{position:relative;z-index:2;display:flex;flex-direction:column;gap:clamp(20px,4vh,44px);}
+
+.eyebrow{font-size:clamp(7px,1.4vw,9px);letter-spacing:.4em;text-transform:uppercase;font-weight:400;}
+
+.name-xl{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(80px,20vw,200px);
+  font-weight:300;line-height:.88;letter-spacing:-.03em;
+}
+.name-xl em{
+  font-style:italic;
+  background:linear-gradient(135deg,var(--ch) 0%,var(--porg) 50%,var(--amb) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.sub-pf{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(13px,2.8vw,19px);color:var(--s60);max-width:480px;line-height:1.65;
+}
+
+/* espiral SVG intro */
+#spiral-wrap{width:min(300px,65vw);height:min(300px,65vw);flex-shrink:0;}
+#ssvg{width:100%;height:100%;overflow:visible;}
+.ring{cursor:pointer;}
+.rline{fill:none;stroke-linecap:round;opacity:.28;transition:opacity .4s,stroke-width .3s;}
+.ring:hover .rline,.ring.active .rline{opacity:.85;}
+.ring.active .rline{stroke-width:2.5;}
+.rlbl{font-family:'Inter',sans-serif;font-size:6.5px;letter-spacing:.2em;text-transform:uppercase;fill:var(--smoke);opacity:.18;pointer-events:none;transition:opacity .4s;}
+.ring:hover .rlbl,.ring.active .rlbl{opacity:.8;}
+.cc{animation:hb 2.5s ease-in-out infinite;transform-origin:0 0;}
+@keyframes hb{0%,100%{transform:scale(1);}14%{transform:scale(1.22);}28%{transform:scale(1);}42%{transform:scale(1.12);}}
+
+/* motivos marinos — grandes, visibles */
+.motif{opacity:0;animation:mf var(--mf,10s) ease-in-out infinite var(--md,0s);transition:opacity 1.2s;}
+.motif.on{opacity:var(--mo,.5);}
+@keyframes mf{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-6px) rotate(4deg);}}
+
+/* hint scroll */
+.scroll-hint{
+  font-size:8px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--s25);display:flex;flex-direction:column;align-items:flex-start;gap:8px;
+}
+
+/* ── SECCIÓN HEADER sticky ── */
+.sec-label{
+  font-size:clamp(7px,1.2vw,9px);letter-spacing:.35em;text-transform:uppercase;
+  font-weight:400;margin-bottom:clamp(10px,2vh,18px);
+}
+
+/* número ornamental */
+.sec-bg-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(140px,28vw,280px);
+  font-weight:300;line-height:1;
+  position:absolute;right:-20px;top:-40px;
+  opacity:.03;pointer-events:none;user-select:none;color:var(--smoke);
+}
+
+/* ── TIPOGRAFÍA EDITORIAL ── */
+.hl-xl{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(44px,9vw,100px);
+  font-weight:300;line-height:.92;letter-spacing:-.02em;
+}
+.hl-xl em{font-style:italic;}
+.hl-xl strong{font-weight:600;}
+
+.hl-md{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(26px,4.5vw,50px);
+  font-weight:300;line-height:1.05;
+}
+.hl-md em{font-style:italic;}
+
+.body{font-size:clamp(13px,1.6vw,15px);line-height:2;color:var(--s60);max-width:600px;}
+.body strong{color:var(--smoke);font-weight:400;}
+
+.pf-quote{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(15px,2.6vw,22px);line-height:1.75;
+}
+
+/* ── GRID DOS COLUMNAS ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,80px);align-items:start;}
+@media(max-width:720px){.two-col{grid-template-columns:1fr;}}
+
+/* ── TRADICIÓN CARDS — neubrutalism ── */
+.trad-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:clamp(24px,3.5vh,40px);}
+@media(max-width:580px){.trad-grid{grid-template-columns:1fr;}}
+
+.tc{
+  padding:clamp(18px,2.5vw,26px);
+  border:2px solid;
+  position:relative;overflow:hidden;
+  transition:transform .12s,box-shadow .12s;
+  box-shadow:5px 5px 0 rgba(237,245,247,.07);
+}
+.tc:hover{transform:translate(-4px,-4px);box-shadow:9px 9px 0 rgba(237,245,247,.09);}
+
+.tc.w{border-color:rgba(139,156,196,.5);} .tc.w .tc-lbl{color:#8B9CC4;} .tc.w .tc-num{color:rgba(139,156,196,.07);}
+.tc.b{border-color:rgba(196,131,74,.5);} .tc.b .tc-lbl{color:#C4834A;} .tc.b .tc-num{color:rgba(196,131,74,.07);}
+.tc.m{border-color:rgba(42,181,196,.5);} .tc.m .tc-lbl{color:#2AB5C4;} .tc.m .tc-num{color:rgba(42,181,196,.07);}
+.tc.t{border-color:rgba(232,96,74,.5);} .tc.t .tc-lbl{color:#E8604A;} .tc.t .tc-num{color:rgba(232,96,74,.07);}
+
+.tc-num{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:300;position:absolute;bottom:-12px;right:10px;line-height:1;pointer-events:none;}
+.tc-lbl{font-size:7.5px;letter-spacing:.25em;text-transform:uppercase;font-weight:500;margin-bottom:10px;display:block;}
+.tc-h{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,2.5vw,22px);font-weight:300;line-height:1.2;margin-bottom:8px;color:var(--smoke);}
+.tc-b{font-size:12.5px;line-height:1.9;color:var(--s60);}
+
+/* ── PULL QUOTE / CONVERGENCIA ── */
+.pull{
+  margin:clamp(24px,3.5vh,40px) 0;
+  padding:clamp(18px,2.8vw,30px) clamp(20px,3vw,36px);
+  border:2px solid rgba(232,96,74,.25);
+  background:linear-gradient(135deg,rgba(232,96,74,.05),rgba(42,181,196,.03));
+  position:relative;
+}
+.pull::before{
+  content:'"';font-family:'Cormorant Garamond',serif;
+  font-size:140px;font-weight:300;color:rgba(232,96,74,.08);
+  position:absolute;top:-30px;left:14px;line-height:1;pointer-events:none;
+}
+
+/* ── BORDER-LEFT BLOCKS ── */
+.bl{border-left:2px solid;padding-left:clamp(14px,2vw,22px);margin-bottom:clamp(18px,3vh,30px);}
+.bl:last-child{margin-bottom:0;}
+.bl.w{border-color:rgba(139,156,196,.45);}
+.bl.b{border-color:rgba(196,131,74,.45);}
+.bl.m{border-color:rgba(42,181,196,.45);}
+.bl.t{border-color:rgba(232,96,74,.45);}
+.bl.c{border-color:rgba(237,245,247,.12);}
+
+/* ── EMOCIONES ── */
+.emo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:clamp(20px,3vh,36px);}
+@media(max-width:500px){.emo-grid{grid-template-columns:repeat(2,1fr);}}
+
+.ebtn{
+  background:transparent;border:2px solid var(--s25);
+  padding:clamp(14px,2vw,20px) 10px;text-align:center;cursor:pointer;
+  color:var(--s60);
+  transition:transform .12s,box-shadow .12s,border-color .15s,color .15s;
+  display:flex;flex-direction:column;align-items:center;gap:9px;
+  box-shadow:3px 3px 0 var(--s08);
+}
+.ebtn:hover,.ebtn.sel{
+  border-color:var(--ch);color:var(--smoke);
+  transform:translate(-3px,-3px);
+  box-shadow:6px 6px 0 var(--ch);
+  background:rgba(232,96,74,.04);
+}
+.ebtn svg{color:var(--s60);transition:color .15s;}
+.ebtn:hover svg,.ebtn.sel svg{color:var(--ch);}
+.emo-word{font-family:'Cormorant Garamond',serif;font-size:clamp(12px,1.8vw,14px);font-style:italic;line-height:1.3;}
+
+#emo-resp{
+  margin-top:22px;padding:clamp(16px,2.5vw,24px);
+  border-left:2px solid var(--ch);background:rgba(232,96,74,.05);
+  font-family:'Playfair Display',serif;font-size:clamp(14px,2.4vw,19px);font-style:italic;line-height:1.75;
+  opacity:0;transform:translateY(10px);transition:opacity .7s,transform .7s;display:none;
+}
+#emo-resp.vis{opacity:1;transform:none;display:block;}
+
+/* ── SEPARADOR ── */
+.sep{height:1px;background:linear-gradient(to right,transparent,var(--s25),transparent);margin:clamp(20px,3vh,36px) 0;}
+
+/* ── ESCRITURA ── */
+.wblock{margin-top:clamp(20px,3vh,32px);}
+.wprompt{font-family:'Cormorant Garamond',serif;font-size:clamp(14px,2.2vw,18px);font-style:italic;color:var(--s60);line-height:1.65;margin-bottom:12px;}
+textarea.tw{
+  width:100%;background:rgba(237,245,247,.03);border:2px solid var(--s08);
+  color:var(--smoke);font-family:'Cormorant Garamond',serif;
+  font-size:clamp(14px,2vw,17px);font-style:italic;font-weight:300;
+  line-height:1.9;padding:clamp(12px,1.8vw,18px);
+  resize:none;min-height:90px;outline:none;
+  transition:border-color .2s,background .2s;
+}
+textarea.tw:focus{border-color:var(--sturq);background:rgba(42,181,196,.03);}
+textarea.tw::placeholder{color:rgba(237,245,247,.18);}
+
+/* ── BOTONES NEUBRUTALISM ── */
+.brow{display:flex;gap:10px;flex-wrap:wrap;margin-top:clamp(20px,3vh,30px);}
+.bpri{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--ch);border:2px solid var(--smoke);
+  padding:clamp(10px,1.5vw,13px) clamp(18px,2.8vw,30px);
+  font-size:clamp(8px,1.3vw,10px);letter-spacing:.18em;text-transform:uppercase;
+  font-weight:500;font-family:'Inter',sans-serif;color:var(--bg);cursor:pointer;
+  transition:transform .1s,box-shadow .1s;box-shadow:4px 4px 0 var(--smoke);
+}
+.bpri:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--smoke);}
+.bpri:active{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--smoke);}
+
+.bsec{
+  display:inline-flex;align-items:center;gap:8px;background:transparent;
+  border:2px solid var(--s25);
+  padding:clamp(10px,1.5vw,13px) clamp(18px,2.8vw,30px);
+  font-size:clamp(8px,1.3vw,10px);letter-spacing:.18em;text-transform:uppercase;
+  font-weight:400;font-family:'Inter',sans-serif;color:var(--s60);cursor:pointer;
+  transition:transform .1s,box-shadow .1s,border-color .15s,color .15s;
+  box-shadow:3px 3px 0 var(--s08);
+}
+.bsec:hover{border-color:var(--sturq);color:var(--sl);transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(42,181,196,.2);}
+
+/* ── CENTRO ── */
+.centro-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(60px,15vw,150px);
+  font-weight:300;font-style:italic;line-height:.88;
+  background:linear-gradient(135deg,var(--ch),var(--porg) 40%,var(--amb) 70%,var(--sturq));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:clamp(20px,4vh,40px);
+}
+.centro-poem{
+  font-family:'Playfair Display',serif;font-size:clamp(15px,2.6vw,22px);
+  font-style:italic;line-height:2.1;color:var(--s60);max-width:440px;
+}
+.centro-poem strong{color:var(--smoke);font-style:normal;font-family:'Cormorant Garamond',serif;font-size:1.25em;}
+
+/* ── REVEAL ANIMATIONS ── */
+.rv{opacity:0;transform:translateY(36px);transition:opacity .85s cubic-bezier(.22,1,.36,1),transform .85s cubic-bezier(.22,1,.36,1);}
+.rv.in{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.22s;}.d3{transition-delay:.34s;}.d4{transition-delay:.48s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  #sidenav{width:36px;}
+  #main{margin-left:36px;}
+  #corner{left:48px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .rv,.orb,.cc,.motif{animation:none!important;transition:none!important;}
+  html{scroll-behavior:auto;}
+}
+</style>
+
+<!-- ═════ SIDEBAR NAV ════ -->
+<nav id="sidenav">
+  <div class="snav-item active" data-s="s0" onclick="goTo('s0')">intro</div>
+  <div class="snav-item" data-s="s1" onclick="goTo('s1')">presencia</div>
+  <div class="snav-item" data-s="s2" onclick="goTo('s2')">tierra</div>
+  <div class="snav-item" data-s="s3" onclick="goTo('s3')">memoria</div>
+  <div class="snav-item" data-s="s4" onclick="goTo('s4')">éter</div>
+  <div class="snav-item" data-s="s5" onclick="goTo('s5')">centro</div>
+</nav>
+
+<div id="corner">Cinthia · oráculo de fuego y mar</div>
+
+<div id="main">
+
+<!-- ═════ §0 INTRO ════ -->
+<section class="sec" id="s0">
+  <canvas id="intro-canvas"></canvas>
+  <div class="orb" style="width:900px;height:700px;bottom:-35%;left:-20%;background:radial-gradient(ellipse,rgba(14,58,66,.5) 0%,transparent 70%);--d:28s;--tx:40px;--ty:-20px;"></div>
+  <div class="orb" style="width:500px;height:700px;top:-25%;right:-15%;background:radial-gradient(ellipse,rgba(200,184,224,.12) 0%,transparent 70%);--d:34s;--delay:-12s;--tx:-30px;--ty:30px;"></div>
+  <div class="orb" style="width:400px;height:300px;bottom:5%;right:5%;background:radial-gradient(ellipse,rgba(232,96,74,.14) 0%,transparent 70%);--d:18s;--delay:-5s;--tx:20px;--ty:-15px;"></div>
+
+  <div class="sec-inner">
+    <div class="two-col" style="align-items:center;gap:clamp(32px,6vw,70px);">
+      <div class="intro-wrap">
+        <span class="eyebrow" style="color:var(--sturq);">Sol · Luna en Cáncer · Kin 179 · 3 Calli</span>
+        <h1 class="name-xl"><em>Cin</em>thia</h1>
+        <p class="sub-pf">fuego que se mueve · corazón que siente · estrella que explota cuando necesita cuidar su llama</p>
+        <div class="scroll-hint">
+          <svg width="12" height="20" viewBox="0 0 12 20" fill="none">
+            <rect x="1" y="1" width="10" height="18" rx="5" stroke="currentColor" stroke-width="1.2"/>
+            <circle cx="6" cy="6" r="2" fill="currentColor" opacity=".6">
+              <animateTransform attributeName="transform" type="translate" values="0,0;0,8;0,0" dur="1.8s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+          <span>toca un anillo · o continúa ↓</span>
+        </div>
+      </div>
+
+      <!-- ESPIRAL -->
+      <div id="spiral-wrap">
+        <svg id="ssvg" viewBox="-170 -170 340 340">
+          <defs>
+            <linearGradient id="gconv" x1="0" y1="1" x2="1" y2="0" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="#C4834A" stop-opacity=".28"/>
+              <stop offset="50%" stop-color="#E8604A" stop-opacity=".22"/>
+              <stop offset="100%" stop-color="#2AB5C4" stop-opacity=".18"/>
+            </linearGradient>
+            <radialGradient id="gcen"><stop offset="0%" stop-color="#E8604A" stop-opacity=".9"/><stop offset="50%" stop-color="#C4834A" stop-opacity=".4"/><stop offset="100%" stop-color="#0E3A42" stop-opacity=".1"/></radialGradient>
+          </defs>
+          <path id="sppath" fill="none" stroke="url(#gconv)" stroke-width="1"
+            d="M2,0 C2,-2 4,-3 0,-3 C-5,-3 -7,0 -7,8 C-7,18 0,24 12,24 C28,24 38,10 38,0 C38,-18 26,-34 0,-34 C-26,-34 -46,-16 -46,0 C-46,26 -26,52 10,52 C46,52 72,24 72,0 C72,-34 44,-68 0,-68 C-44,-68 -86,-34 -86,0 C-86,52 -44,104 14,104"/>
+
+          <!-- ═══ MOTIVOS MARINOS GRANDES ═══ -->
+          <!-- CANGREJO →  arriba-derecha -->
+          <g class="motif" style="--mf:9s;--md:0s;--mo:.55;" transform="translate(126,-68)">
+            <ellipse cx="0" cy="0" rx="18" ry="13" fill="none" stroke="#C4834A" stroke-width="2"/>
+            <path d="M-12,-5 Q0,-12 12,-5" fill="none" stroke="#E8604A" stroke-width="1.3"/>
+            <path d="M-9,3 Q0,8 9,3" fill="none" stroke="#E8604A" stroke-width="1"/>
+            <line x1="-15" y1="-4" x2="-26" y2="-11" stroke="#C4834A" stroke-width="1.6"/>
+            <line x1="-15" y1="1" x2="-26" y2="2" stroke="#C4834A" stroke-width="1.6"/>
+            <line x1="-15" y1="7" x2="-24" y2="14" stroke="#C4834A" stroke-width="1.4"/>
+            <line x1="15" y1="-4" x2="26" y2="-11" stroke="#C4834A" stroke-width="1.6"/>
+            <line x1="15" y1="1" x2="26" y2="2" stroke="#C4834A" stroke-width="1.6"/>
+            <line x1="15" y1="7" x2="24" y2="14" stroke="#C4834A" stroke-width="1.4"/>
+            <path d="M-26,-11 Q-35,-18 -30,-23 Q-21,-16 -26,-11 Z" fill="none" stroke="#C4834A" stroke-width="1.5"/>
+            <path d="M26,-11 Q35,-18 30,-23 Q21,-16 26,-11 Z" fill="none" stroke="#C4834A" stroke-width="1.5"/>
+            <line x1="-5" y1="-13" x2="-5" y2="-21" stroke="#E8604A" stroke-width="1.3"/>
+            <line x1="5" y1="-13" x2="5" y2="-21" stroke="#E8604A" stroke-width="1.3"/>
+            <circle cx="-5" cy="-21" r="3.5" fill="none" stroke="#E8604A" stroke-width="1.4"/>
+            <circle cx="5" cy="-21" r="3.5" fill="none" stroke="#E8604A" stroke-width="1.4"/>
+            <circle cx="-5" cy="-21" r="1.2" fill="#E8604A"/>
+            <circle cx="5" cy="-21" r="1.2" fill="#E8604A"/>
+          </g>
+          <!-- OLAS → izquierda -->
+          <g class="motif" style="--mf:12s;--md:-5s;--mo:.5;" transform="translate(-126,55)">
+            <path d="M-30,0 Q-20,-14 -10,0 Q0,14 10,0 Q20,-14 30,0" fill="none" stroke="#2AB5C4" stroke-width="2" stroke-linecap="round"/>
+            <path d="M-30,13 Q-20,-1 -10,13 Q0,27 10,13 Q20,-1 30,13" fill="none" stroke="#2AB5C4" stroke-width="1.4" stroke-linecap="round" opacity=".6"/>
+            <path d="M-30,26 Q-20,12 -10,26 Q0,40 10,26 Q20,12 30,26" fill="none" stroke="#1A7A8A" stroke-width="1" stroke-linecap="round" opacity=".35"/>
+          </g>
+          <!-- ESTRELLA DE MAR → abajo -->
+          <g class="motif" style="--mf:14s;--md:-8s;--mo:.52;" transform="translate(38,118)">
+            <path d="M0,-22 L5,-8 L20,-8 L9,2 L13,18 L0,9 L-13,18 L-9,2 L-20,-8 L-5,-8 Z" fill="none" stroke="#E8604A" stroke-width="2" stroke-linejoin="round"/>
+            <circle cx="0" cy="-15" r="2" fill="#E8604A"/>
+            <circle cx="16" cy="-5" r="2" fill="#E8604A"/>
+            <circle cx="10" cy="14" r="2" fill="#E8604A"/>
+            <circle cx="-10" cy="14" r="2" fill="#E8604A"/>
+            <circle cx="-16" cy="-5" r="2" fill="#E8604A"/>
+            <circle cx="0" cy="0" r="4" fill="none" stroke="#E8604A" stroke-width="1.3"/>
+          </g>
+          <!-- CORAL → izq abajo -->
+          <g class="motif" style="--mf:16s;--md:-11s;--mo:.48;" transform="translate(-93,120)">
+            <line x1="0" y1="22" x2="0" y2="-10" stroke="#1A7A8A" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="0" y1="10" x2="-16" y2="-4" stroke="#1A7A8A" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="0" y1="3" x2="14" y2="-8" stroke="#1A7A8A" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="0" y1="-4" x2="-10" y2="-18" stroke="#1A7A8A" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="0" y1="-7" x2="9" y2="-20" stroke="#1A7A8A" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="0" cy="-10" r="4" fill="#2AB5C4"/>
+            <circle cx="-16" cy="-4" r="3.5" fill="#2AB5C4"/>
+            <circle cx="14" cy="-8" r="3.5" fill="#2AB5C4"/>
+            <circle cx="-10" cy="-18" r="3" fill="#2AB5C4"/>
+            <circle cx="9" cy="-20" r="3" fill="#2AB5C4"/>
+          </g>
+
+          <!-- ANILLOS -->
+          <g class="ring" id="r0" data-s="s1"><circle class="rline" r="145" stroke="#8B9CC4" stroke-width="1" stroke-dasharray="6 8"/><circle r="145" fill="none" stroke="transparent" stroke-width="30"/><text class="rlbl" x="0" y="-148" text-anchor="middle">Presencia</text></g>
+          <g class="ring" id="r1" data-s="s2"><circle class="rline" r="106" stroke="#2AB5C4" stroke-width="1" stroke-dasharray="5 7"/><circle r="106" fill="none" stroke="transparent" stroke-width="28"/><text class="rlbl" x="0" y="-109" text-anchor="middle">Tierra</text></g>
+          <g class="ring" id="r2" data-s="s3"><circle class="rline" r="70" stroke="#E8604A" stroke-width="1" stroke-dasharray="3 7"/><circle r="70" fill="none" stroke="transparent" stroke-width="26"/><text class="rlbl" x="0" y="-73" text-anchor="middle">Memoria</text></g>
+          <g class="ring" id="r3" data-s="s4"><circle class="rline" r="40" stroke="#1A7A8A" stroke-width="1" stroke-dasharray="2 6"/><circle r="40" fill="none" stroke="transparent" stroke-width="22"/><text class="rlbl" x="0" y="-43" text-anchor="middle">Éter</text></g>
+          <g id="cdot" style="cursor:pointer;" data-s="s5">
+            <circle r="22" fill="rgba(14,58,66,.12)"/>
+            <g class="cc"><circle r="13" fill="rgba(232,96,74,.2)" stroke="rgba(196,131,74,.4)" stroke-width=".8"/><circle r="7" fill="url(#gcen)"/><circle r="3" fill="#E8604A" opacity=".95"/></g>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ §1 PRESENCIA ════ -->
+<section class="sec" id="s1">
+  <div class="orb" style="width:600px;height:400px;top:-10%;right:-10%;background:radial-gradient(ellipse,rgba(200,184,224,.1) 0%,transparent 70%);--d:24s;--tx:-25px;--ty:20px;"></div>
+  <div class="sec-inner">
+    <span class="sec-bg-num">I</span>
+    <div class="rv">
+      <div class="sec-label" style="color:var(--pblue)">① Presencia · primer umbral</div>
+      <h2 class="hl-xl">¿Cómo llegas<br><em style="color:var(--mauve);">hoy?</em></h2>
+    </div>
+    <div class="rv d1"><p class="body" style="margin:clamp(14px,2.5vh,22px) 0;">Antes de leer, el oráculo escucha.<br>No el estado que muestras. El que <strong>sientes en este momento</strong>.</p></div>
+    <div class="emo-grid rv d2">
+      <button class="ebtn" data-emo="ardiendo" onclick="pickEmo(this)">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 24C14 24 6 18 6 11a8 8 0 0 1 16 0c0 7-8 13-8 13z" stroke="currentColor" stroke-width="1.4"/><circle cx="14" cy="11" r="3" stroke="currentColor" stroke-width="1.2"/></svg>
+        <span class="emo-word">ardiendo<br>por dentro</span>
+      </button>
+      <button class="ebtn" data-emo="ceniza" onclick="pickEmo(this)">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="9" stroke="currentColor" stroke-width="1.4"/><circle cx="14" cy="14" r="4" stroke="currentColor" stroke-width="1"/></svg>
+        <span class="emo-word">convertida<br>en ceniza</span>
+      </button>
+      <button class="ebtn" data-emo="contenida" onclick="pickEmo(this)">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="7" y="5" width="14" height="18" rx="1" stroke="currentColor" stroke-width="1.4"/><line x1="11" y1="10" x2="17" y2="10" stroke="currentColor" stroke-width="1.2"/><line x1="11" y1="14" x2="17" y2="14" stroke="currentColor" stroke-width="1.2"/><line x1="11" y1="18" x2="15" y2="18" stroke="currentColor" stroke-width="1.2"/></svg>
+        <span class="emo-word">contenida<br>sin salida</span>
+      </button>
+      <button class="ebtn" data-emo="expandida" onclick="pickEmo(this)">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" stroke="currentColor" stroke-width="1.4"/><line x1="14" y1="4" x2="14" y2="7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="14" y1="21" x2="14" y2="24" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="4" y1="14" x2="7" y2="14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="21" y1="14" x2="24" y2="14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="7.5" y1="7.5" x2="9.6" y2="9.6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="18.4" y1="18.4" x2="20.5" y2="20.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="20.5" y1="7.5" x2="18.4" y2="9.6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="9.6" y1="18.4" x2="7.5" y2="20.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <span class="emo-word">expandida<br>y presente</span>
+      </button>
+      <button class="ebtn" data-emo="cuidando" onclick="pickEmo(this)">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M5 16c0-2 1.5-3.5 3.5-3.5S12 13.5 14 15c2-1.5 4-2.5 5.5-2.5S23 14 23 16c0 3-4 6-9 9-5-3-9-6-9-9z" stroke="currentColor" stroke-width="1.4"/></svg>
+        <span class="emo-word">cuidando<br>a otros</span>
+      </button>
+      <button class="ebtn" data-emo="umbral" onclick="pickEmo(this)">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="6" y="4" width="16" height="20" rx="1" stroke="currentColor" stroke-width="1.4"/><line x1="14" y1="13" x2="14" y2="15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="emo-word">en un<br>umbral</span>
+      </button>
+    </div>
+    <div id="emo-resp" class="rv d3"></div>
+    <div class="brow rv d4" id="pres-next" style="display:none;">
+      <button class="bpri" onclick="goToEmo()">Ir más adentro →</button>
+      <button class="bsec" onclick="goTo('s2')">Ver la carta</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ §2 TIERRA — las 4 tradiciones ════ -->
+<section class="sec" id="s2">
+  <div class="orb" style="width:900px;height:600px;bottom:-40%;left:-30%;background:radial-gradient(ellipse,rgba(14,58,66,.5) 0%,transparent 70%);--d:30s;--tx:40px;--ty:-20px;"></div>
+  <div class="sec-inner">
+    <span class="sec-bg-num">II</span>
+    <div class="rv">
+      <div class="sec-label" style="color:var(--sturq)">② Tierra · 23 junio 1990 · 21:30 · Torreón</div>
+      <h2 class="hl-xl">Cuatro tradiciones.<br><em>Una misma llama.</em></h2>
+    </div>
+    <div class="sep rv d1"></div>
+    <div class="trad-grid rv d1">
+      <!-- ASTROLOGÍA -->
+      <div class="tc w">
+        <span class="tc-lbl">Astrología Occidental · carta natal</span>
+        <div class="tc-h">Sol ☉ + Luna ☽ en Cáncer<br>Ascendente Capricornio</div>
+        <div class="tc-b">
+          Dos luminarias en el mismo signo — raro. Mente y corazón hablan el mismo idioma: el del agua, la memoria, el cuidado. El <strong>Sol en Casa 6</strong> busca propósito en el servicio cotidiano; no le basta existir, necesita ser útil. La <strong>Luna conjunta Júpiter (0.42°)</strong> en Cáncer: una generosidad emocional que se desborda naturalmente. Cuando Cinthia quiere, quiere mucho. El <strong>Ascendente Capricornio</strong> es la armadura estructural: seria hacia afuera, oceánica hacia adentro. <strong>Marte conjunto Júpiter en Aries (0.57°)</strong>: cuando algo le importa de verdad, va con todo su cuerpo. <strong>Venus en Tauro</strong>: el amor necesita raíces físicas, presencia, raíces reales. <strong>Mercurio en Géminis</strong> en Casa 5: mente que conecta rápido, que aprende jugando. <strong>Urano, Saturno, Neptuno en Casa 12</strong>: una vida espiritual intensa y privada que opera en segundo plano antes de que pueda nombrarla.
+        </div>
+        <span class="tc-num">I</span>
+      </div>
+      <!-- BAZI -->
+      <div class="tc b">
+        <span class="tc-lbl">BaZi · Destino Chino · 四柱命理</span>
+        <div class="tc-h">Ji — Tierra Yin · Día Maestro<br>Pilares: Geng/Wu · Ren/Wu · Ji/Wei · Yi/Hai</div>
+        <div class="tc-b">
+          <strong>Ji — el jardín fértil</strong>. Tierra que hace germinar cualquier semilla que cae en ella, sin imponerse, sin exigir reconocimiento. Es la tierra de los valles, no de las montañas. <strong>Fuego 28% como recurso</strong>: la intuición y el carisma son combustible disponible, no decoración — cuando Cinthia lo activa, todo cambia. <strong>Agua 32%</strong>: pensamiento profundo, capacidad de conectar ideas no obvias. <strong>Estrella Solitaria</strong> en la estructura del destino: hay un mundo interno al que pocas personas tienen acceso genuino — no por distancia sino porque Cinthia no sabe bien cómo invitar a alguien allí. <strong>7 Muertes (Qi Sha) en la Hora</strong>: una fuerza que convierte los obstáculos en combustible. Desafíos recurrentes que la empujan a crecer antes de poder sostener a otros. El patrón oscuro: creer que pedir ayuda es señal de haber fallado. <strong>Yi/Hai en pilar Hora</strong>: Madera Yin sobre Agua — una creatividad que crece desde las profundidades, que necesita humedad para existir.
+        </div>
+        <span class="tc-num">II</span>
+      </div>
+      <!-- TZOLKIN -->
+      <div class="tc m">
+        <span class="tc-lbl">Tzolkin Maya · calendario sagrado · 260 días</span>
+        <div class="tc-h">Kin 179 · Tormenta Planetaria Azul<br>Tono 10 de Manifestación</div>
+        <div class="tc-b">
+          <strong>Cauac — Tormenta</strong>: no evolucionas en línea recta. Evolucionas en espiral. Cada gran cambio en tu vida no es ruptura; es el siguiente giro de la misma llama que ya estaba ardiendo. La Tormenta cataliza, purifica, reorganiza el sistema — siempre desde adentro hacia afuera. <strong>Tono 10 de Manifestación</strong>: lo que sembraste en nueve pasos ya tiene forma visible en el mundo exterior. Estás en el momento de producir fruto, no de seguir sembrando. <strong>Kin Oculto: Viento (Ik, Kin 2)</strong>: el poder que opera desde adentro. Cuando Cinthia habla desde su verdad más profunda — no desde lo que se espera de ella — el mundo se mueve. El Viento mueve las aguas sin tocarlas. <strong>Kin Antípoda: Luna (Muluc, Kin 9)</strong>: la reconciliación con el mundo emocional es el reto de vida central. <strong>Onda Encantada del Perro (Oc)</strong>: el amor como práctica espiritual, la fidelidad como camino de evolución. Sostener sin perder el centro.
+        </div>
+        <span class="tc-num">III</span>
+      </div>
+      <!-- TONALPOHUALLI -->
+      <div class="tc t">
+        <span class="tc-lbl">Tonalpohualli · calendario nahua · 260 días</span>
+        <div class="tc-h">3 Calli · Tres Casa<br>Trecena de Cipactli · Señor Piltzintecuhtli</div>
+        <div class="tc-b">
+          <strong>Calli — La Casa</strong>: en la cosmología nahua, la casa no es solo el lugar donde se vive. Es el contenedor del fuego sagrado — el <em>tlecuil</em> — que nunca puede apagarse. La persona de Calli es quien guarda ese fuego para su familia, su linaje, su comunidad. No eres solo la llama. Eres la casa que la contiene y la protege. El número <strong>3</strong> es el número de la trinidad dinámica — no el equilibrio estático sino la tensión creativa entre fuerzas. Dos elementos no bastan; hace falta un tercero que los reconcilie. <strong>Trecena de Cipactli</strong>: el primer día, el primer movimiento del tiempo. Las almas de Cipactli traen impulso primordial — una energía que empuja hacia adelante incluso cuando no sabe exactamente hacia dónde. <strong>Piltzintecuhtli, señor de la noche</strong>: el dios joven, el señor del amanecer, cuida lo que crece en el silencio y en la oscuridad. Lo que Cinthia siembra en su interior germina mientras duerme.
+        </div>
+        <span class="tc-num">IV</span>
+      </div>
+    </div>
+    <div class="pull rv d2">
+      <p class="pf-quote" style="color:var(--smoke);">Las cuatro tradiciones convergen en lo mismo: Cinthia es expansiva hacia adentro, no hacia afuera. No cambia a medias — transforma. Cuando libera lo que acumula, lo hace de manera total.</p>
+    </div>
+    <div class="wblock rv d3">
+      <p class="wprompt">¿Qué de esto resuena más ahora mismo?</p>
+      <textarea class="tw" id="w-tierra" rows="3" placeholder="Lo que emerge…"></textarea>
+    </div>
+    <div class="brow rv d4">
+      <button class="bpri" onclick="goTo('s3')">Ir a Memoria →</button>
+      <button class="bsec" onclick="save('tierra')">Guardar nota</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ §3 MEMORIA ════ -->
+<section class="sec" id="s3">
+  <div class="orb" style="width:700px;height:500px;top:-20%;right:-20%;background:radial-gradient(ellipse,rgba(196,131,74,.14) 0%,transparent 70%);--d:26s;--delay:-8s;--tx:-20px;--ty:25px;"></div>
+  <div class="orb" style="width:400px;height:300px;bottom:10%;left:5%;background:radial-gradient(ellipse,rgba(232,96,74,.1) 0%,transparent 70%);--d:20s;--delay:-4s;--tx:15px;--ty:-10px;"></div>
+  <div class="sec-inner">
+    <span class="sec-bg-num">III</span>
+    <div class="two-col">
+      <div>
+        <div class="rv">
+          <div class="sec-label" style="color:var(--ch)">③ Memoria · patrones más antiguos que esta vida</div>
+          <h2 class="hl-xl">Patrones<br>más antiguos<br><em>que esta vida</em></h2>
+        </div>
+        <div class="rv d1">
+          <div class="sep"></div>
+          <p class="body">Hay algo en ti que se repite sin que lo hayas elegido conscientemente. No es un defecto — es una memoria kármica. Los sistemas la nombraron de maneras distintas y llegaron al mismo lugar.</p>
+        </div>
+        <div class="pull rv d2" style="border-color:rgba(232,96,74,.3);">
+          <p class="pf-quote" style="color:var(--smoke);">Cinthia tiene un patrón recurrente: creer que debe ganarse el derecho a ser cuidada. El mar recibe la lluvia sin disminuirse.</p>
+        </div>
+        <div class="wblock rv d3">
+          <p class="wprompt">¿Qué patrón en tu vida se siente demasiado antiguo para ser de esta vida?</p>
+          <textarea class="tw" id="w-memoria" rows="4" placeholder="Escribe lo que emerge…"></textarea>
+        </div>
+        <div class="brow rv d4">
+          <button class="bpri" onclick="goTo('s4')">Ir al Éter →</button>
+          <button class="bsec" onclick="save('memoria')">Guardar</button>
+        </div>
+      </div>
+      <div>
+        <div class="rv d1">
+          <div class="bl w" style="margin-bottom:22px;">
+            <span class="tc-lbl" style="color:#8B9CC4;">Oposición Sol ☉ – Urano ♅ · 5.44°</span>
+            <div class="hl-md" style="margin-bottom:10px;font-size:clamp(20px,3.2vw,36px);">Tensión entre<br><em>pertenecer y ser libre</em></div>
+            <p class="body">Un pulso constante que puede vivirse como "no sé si echar raíces o salir corriendo". Esta oposición produce personas que necesitan independencia incluso dentro de sus amores más profundos. <strong>Saturno, Urano y Neptuno en Casa 12</strong>: el trabajo interior más importante de esta vida ocurre en capas que no son visibles ni para Cinthia misma hasta que ya han cambiado algo. Neptuno en Casa 12 en su domicilio: una permeabilidad espiritual muy alta — absorbe el estado emocional del entorno sin saber que lo está haciendo. <strong>Nodo Norte en Acuario</strong>: el camino evolutivo va hacia adelante, hacia lo colectivo, hacia la renovación de sistemas. El Nodo Sur en Leo sugiere que en vidas anteriores el centro era el yo; ahora el aprendizaje es "nosotros".</p>
+          </div>
+          <div class="bl b" style="margin-bottom:22px;">
+            <span class="tc-lbl" style="color:#C4834A;">Estrella Solitaria · Qi Sha (7 Muertes) · BaZi</span>
+            <div class="hl-md" style="margin-bottom:10px;font-size:clamp(20px,3.2vw,36px);">El mundo interno<br><em>que pocos conocen</em></div>
+            <p class="body">La Estrella Solitaria indica un mundo interior tan vasto que pocas personas tienen acceso genuino a él. No porque Cinthia lo esconda con intención, sino porque ese espacio es difícil de nombrar. Las <strong>7 Muertes (Qi Sha)</strong> en la Hora son la estrella más intensa del sistema BaZi — fuerza que convierte los obstáculos directamente en poder personal. El patrón: cada vez que algo externo intenta someterla, en lugar de doblarse, Cinthia transforma. Pero ese proceso consume una energía enorme que podría usarse de otra manera si aprendiera a pedir apoyo antes de llegar al límite.</p>
+          </div>
+          <div class="bl m">
+            <span class="tc-lbl" style="color:#2AB5C4;">Antípoda Luna Blanca · Kin Maya · reconciliación</span>
+            <div class="hl-md" style="margin-bottom:10px;font-size:clamp(20px,3.2vw,36px);"><em>El mar que aprendió<br>a recibir lluvia</em></div>
+            <p class="body">La Luna Blanca como Kin Antípoda es el reto de vida más claro del Tzolkin: <strong>reconciliarse con el mundo emocional propio</strong>. La Tormenta en desequilibrio acumula presión hasta que explota — como el mar que no puede contener más. La Tormenta integrada purifica en el momento justo, antes de que la presión sea insostenible. El trabajo central: no controlar las emociones sino habitarlas. No retener las aguas sino aprender a fluir con ellas. El mar no lucha contra sus propias mareas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ §4 ÉTER ════ -->
+<section class="sec" id="s4">
+  <div class="orb" style="width:900px;height:700px;top:-40%;left:-30%;background:radial-gradient(ellipse,rgba(14,58,66,.4) 0%,transparent 70%);--d:32s;--tx:50px;--ty:30px;"></div>
+  <div class="sec-inner">
+    <span class="sec-bg-num">IV</span>
+    <div class="two-col">
+      <div>
+        <div class="rv">
+          <div class="sec-label" style="color:var(--st)">④ Éter · el propósito del alma</div>
+          <h2 class="hl-xl">El hilo que une<br><em style="background:linear-gradient(135deg,var(--sturq),var(--lav));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">todas<br>tus llamas</em></h2>
+        </div>
+        <div class="rv d1"><div class="sep"></div>
+          <p class="body">No el propósito de <strong>esta</strong> vida. El propósito del alma como entidad que viaja a través de muchas existencias. Lo que permanece cuando todo lo demás cambia.</p>
+        </div>
+        <div class="pull rv d2" style="border-color:rgba(42,181,196,.3);">
+          <p class="pf-quote" style="color:var(--smoke);">El mar y el fuego no se contradicen en Cinthia. El vapor que sube cuando se encuentran es el lugar donde vive su alma — ese umbral entre dos mundos donde su trabajo más profundo ocurre.</p>
+        </div>
+        <div class="wblock rv d3">
+          <p class="wprompt">Si esta vida es un capítulo, ¿de qué libro crees que forma parte?</p>
+          <textarea class="tw" id="w-eter" rows="4" placeholder="Sin presión. Sin forma correcta."></textarea>
+        </div>
+        <div class="brow rv d4">
+          <button class="bpri" onclick="goTo('s5')">Llegar al centro →</button>
+          <button class="bsec" onclick="save('eter')">Guardar</button>
+        </div>
+      </div>
+      <div>
+        <div class="rv d1">
+          <div class="bl c" style="margin-bottom:22px;">
+            <span class="tc-lbl" style="color:var(--s25);">♄ Saturno · ♅ Urano · ♆ Neptuno en Casa 12</span>
+            <div class="hl-md" style="margin-bottom:10px;font-size:clamp(20px,3.2vw,36px);">El trabajo que sucede<br><em>debajo de la superficie</em></div>
+            <p class="body">Casa 12 es el lugar del inconsciente colectivo, del karma, del retiro espiritual. Tener tres planetas pesados aquí es un mapa de un alma que tiene trabajo interior denso en esta encarnación. No trabajo visible ni reconocido — trabajo silencioso que sostiene todo lo demás. <strong>Neptuno en Casa 12 en Capricornio</strong>: una conexión espiritual que se manifiesta en la disciplina, en la constancia, en el cuidado de estructuras que protegen lo sagrado. Cinthia tiene acceso natural a capas de la realidad que otros no perciben — intuición, presencia energética, capacidad de sanar con el solo hecho de estar presente. Mucho de lo que procesa ocurre antes de que pueda nombrarlo con palabras.</p>
+          </div>
+          <div class="bl m" style="margin-bottom:22px;">
+            <span class="tc-lbl" style="color:#2AB5C4;">Kin Oculto · Ik · Viento Blanco · Kin 2</span>
+            <div class="hl-md" style="margin-bottom:10px;font-size:clamp(20px,3.2vw,36px);">La sabiduría que<br><em>mueve sin tocar</em></div>
+            <p class="body">El Kin Oculto es la fuerza que opera desde el interior de la identidad — lo que no se muestra fácilmente pero que cuando aparece, cambia la perspectiva de todos los que la escuchan. <strong>Ik, el Viento</strong>: no el que habla mucho sino el que habla cuando tiene algo genuino que decir. La comunicación de Cinthia tiene peso cuando viene desde adentro — desde su saber, desde su cuerpo, desde su historia vivida. El viento invisible que mueve las aguas profundas sin que nadie vea de dónde viene.</p>
+          </div>
+          <div class="bl t">
+            <span class="tc-lbl" style="color:#E8604A;">Tonalpohualli · 3 Calli · el tlecuil que no se apaga</span>
+            <div class="hl-md" style="margin-bottom:10px;font-size:clamp(20px,3.2vw,36px);">Guardiana del<br><em>fuego sagrado</em></div>
+            <p class="body">En la cosmología nahua, el fuego del hogar — el <em>tlecuil</em> — era responsabilidad de las mujeres de la casa. No era un privilegio sino una obligación sagrada: mantener viva la llama que sostenía a toda la familia, todo el linaje. Cinthia no es solo el fuego. Es la casa que lo cuida. El número 3 en Calli habla de dinamismo: no guardar el fuego de manera pasiva sino alimentarlo activamente, con leña, con intención, con presencia constante. <strong>Piltzintecuhtli</strong>, el señor joven que cuida su noche, siembra en ella lo que florecerá sin que ella lo planee.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ §5 CENTRO ════ -->
+<section class="sec" id="s5" style="display:flex;align-items:center;justify-content:center;text-align:center;">
+  <div class="orb" style="width:800px;height:800px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(232,96,74,.08) 0%,rgba(14,58,66,.12) 50%,transparent 70%);--d:40s;--tx:20px;--ty:-20px;"></div>
+  <div style="position:relative;z-index:2;max-width:600px;padding:max(80px,env(safe-area-inset-top,0px)) clamp(20px,5vw,60px) max(80px,env(safe-area-inset-bottom,0px));">
+    <div class="rv">
+      <div class="sec-label" style="color:var(--s25);letter-spacing:.4em;">⑤ Centro · el fuego original</div>
+      <div class="centro-name">Cinthia.</div>
+    </div>
+    <div class="rv d1">
+      <div class="centro-poem">
+        Dos luces en el mismo cielo —<br>
+        Sol y Luna en Cáncer —<br>
+        tu mente y tu corazón<br>
+        hablan el mismo idioma<br>
+        desde antes de nacer.<br><br>
+
+        <strong>Ji. Tierra Yin.</strong><br>
+        No la montaña que resiste.<br>
+        El jardín que hace germinar<br>
+        cualquier semilla que cae en ti<br>
+        sin exigir que lo vean.<br><br>
+
+        Cauac llega en espiral.<br>
+        No rompes — transformas.<br>
+        <strong>Tono Diez:</strong> ya llegaste.<br>
+        Lo que sembraste en nueve pasos<br>
+        ya tiene forma en el mundo exterior.<br><br>
+
+        <strong>Calli.</strong><br>
+        No eres solo la llama.<br>
+        Eres la casa que la cuida.<br>
+        El tlecuil que no se apaga<br>
+        para que todos encuentren calor<br>
+        cuando vuelven.<br><br>
+
+        Viento oculto en la Tormenta:<br>
+        cuando hablas desde adentro,<br>
+        desde lo que realmente sabes,<br>
+        el mundo se mueve<br>
+        sin que nadie vea de dónde viene el viento.<br><br>
+
+        Piltzintecuhtli cuida tu noche.<br>
+        Lo que siembras en el silencio<br>
+        florece antes de que lo planees.<br><br>
+
+        <strong>No hay nada que aprender aquí.</strong><br>
+        Solo recordar<br>
+        que el fuego de tu casa<br>
+        nunca fue tuyo para ganarte.<br>
+        Ya estaba encendido<br>
+        la primera vez que respiraste.
+      </div>
+    </div>
+    <div class="wblock rv d2">
+      <textarea class="tw" id="w-centro" rows="6" style="text-align:center;" placeholder="Escribe lo que emerge. O no escribas nada."></textarea>
+    </div>
+    <div class="brow rv d3" style="justify-content:center;">
+      <button class="bsec" onclick="save('centro')">Guardar lo que escribiste</button>
+      <button class="bsec" onclick="goTo('s0')">Volver al inicio</button>
+      <a class="bsec" href="./eter-nomad-landing.html">← Volver al mapa</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /main -->
+
+<script>
+/* ── NOTAS ── */
+let notes={};
+try{const s=localStorage.getItem('c-or3');if(s)notes=JSON.parse(s);}catch(e){}
+['tierra','memoria','eter','centro'].forEach(k=>{const el=document.getElementById('w-'+k);if(el&&notes[k])el.value=notes[k];});
+function save(k){
+  const el=document.getElementById('w-'+k);if(!el)return;
+  notes[k]=el.value;try{localStorage.setItem('c-or3',JSON.stringify(notes));}catch(e){}
+  const btn=event.target,o=btn.textContent;btn.textContent='Guardado ✓';setTimeout(()=>btn.textContent=o,1800);
+}
+
+/* ── NAVEGACIÓN ── */
+function goTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}
+
+// rings intro
+document.querySelectorAll('.ring,[id="cdot"]').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const s=el.dataset.s;if(s)goTo(s);
+    document.querySelectorAll('.ring').forEach(r=>r.classList.remove('active'));
+    el.classList.add('active');
+  });
+});
+
+/* ── SIDEBAR + CORNER activo ── */
+const secs=[...document.querySelectorAll('.sec')];
+const dots=[...document.querySelectorAll('.snav-item')];
+const corner=document.getElementById('corner');
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id;
+      dots.forEach(d=>d.classList.toggle('active',d.dataset.s===id));
+      corner.classList.toggle('bright',id!=='s0');
+    }
+  });
+},{threshold:.45});
+secs.forEach(s=>io.observe(s));
+
+/* ── REVEAL ── */
+const rObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>rObs.observe(el));
+
+/* ── EMOCIONES ── */
+const emoMap={
+  ardiendo:{t:"Ese fuego interno es Marte conjunto Júpiter en Aries (0.57°) en tu Casa 3. Cuando algo te importa de verdad, vas con todo tu cuerpo. La pregunta del oráculo: ¿ese ardor es tuyo — o lo encendiste para alguien más?",n:"s2"},
+  ceniza:{t:"La Tormenta Cauac no se apaga — transforma el combustible. Las cenizas son lo que queda después de que el fuego consumió lo que ya no necesitabas. No estás vacía. Estás haciendo espacio. ¿Para qué?",n:"s3"},
+  contenida:{t:"Ji — Tierra Yin — puede acumular hasta que ya no cabe nada más. Saturno, Urano y Neptuno en Casa 12 guardan lo que no encuentras palabras para nombrar. El oráculo te pregunta: ¿qué llevas adentro que aún no has podido soltar — y qué pasaría si lo soltaras?",n:"s3"},
+  expandida:{t:"Luna conjunta Júpiter en Cáncer (0.42°): generosidad emocional en su mejor forma. Tono 10 de Manifestación — lo que sembraste ya tiene forma visible. Los anillos interiores se abren diferente cuando llegas desde la plenitud.",n:"s4"},
+  cuidando:{t:"Júpiter en Cáncer Casa 6: encuentras significado genuino en el cuidado cotidiano. Pero la Estrella Solitaria te advierte: el mundo interno necesita ser cuidado también. ¿Quién te cuida a ti mientras cuidas a todos? La respuesta importa.",n:"s2"},
+  umbral:{t:"Los umbrales son donde una versión de ti termina y la siguiente aún no ha llegado. Los nahuas lo llamaban nepantla — el entre-medio. La Oposición Sol–Urano dice que has cruzado umbrales antes. Siempre has cruzado. Puedes quedarte aquí un poco más.",n:"s3"}
+};
+let selSec='s2';
+function pickEmo(btn){
+  document.querySelectorAll('.ebtn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  const m=emoMap[btn.dataset.emo];if(!m)return;
+  selSec=m.n;
+  const r=document.getElementById('emo-resp');
+  r.textContent=m.t;r.classList.add('vis');
+  document.getElementById('pres-next').style.display='flex';
+}
+function goToEmo(){goTo(selSec);}
+
+/* ── ESPIRAL ── */
+const sp=document.getElementById('sppath');let ang=0;
+(function anim(){ang+=.006;sp.setAttribute('transform',`rotate(${ang})`);requestAnimationFrame(anim);})();
+
+/* ── MOTIVOS MARINOS ── */
+setTimeout(()=>document.querySelectorAll('.motif').forEach(m=>m.classList.add('on')),500);
+
+/* ── CANVAS PARTÍCULAS ── */
+(function(){
+  const cv=document.getElementById('intro-canvas');if(!cv)return;
+  const ctx=cv.getContext('2d');let W,H,pts=[];
+  const COLS=['rgba(42,181,196,','rgba(232,96,74,','rgba(200,184,224,','rgba(196,131,74,'];
+  function resize(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;}
+  window.addEventListener('resize',resize);resize();
+  for(let i=0;i<55;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.28,r:Math.random()*1.4+.4,c:COLS[Math.floor(Math.random()*COLS.length)],a:Math.random()*.18+.03});
+  function draw(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c+p.a+')';ctx.fill();});requestAnimationFrame(draw);}draw();
+})();
+</script>
